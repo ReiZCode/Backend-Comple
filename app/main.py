@@ -8,6 +8,7 @@ from .queries.products_query import router as products_query_router
 from .queries.recommendations_query import router as recommendations_query_router
 from .commands.sales_command import router as sales_command_router
 from .routes import auth  
+from fastapi.responses import RedirectResponse
 Base.metadata.create_all(bind=engine)
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,6 +39,6 @@ app.include_router(recommendations_query_router)
 app.include_router(sales_command_router)
 app.include_router(auth.router)  
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root():
-    return {"message": "API CQRS funcionando "}
+    return RedirectResponse(url="/docs")
