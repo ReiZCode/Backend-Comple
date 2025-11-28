@@ -40,6 +40,7 @@ class Product(Base):
     Description = Column(Text, nullable=False)
     Categoria = Column(String, nullable=True)
     UnitPrice = Column(Float, nullable=False)
+    Image = Column(String, nullable=True)
 
     # Relación 1:N con Sales
     sales = relationship("Sale", back_populates="product")

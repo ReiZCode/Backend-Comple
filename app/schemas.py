@@ -47,6 +47,7 @@ class ProductBase(BaseModel):
     Description: str
     Categoria: Optional[str] = None
     UnitPrice: float
+    Image: Optional[str] = None
 
     class Config:
         from_attributes = True

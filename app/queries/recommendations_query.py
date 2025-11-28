@@ -20,7 +20,7 @@ def get_recommendations_for_customer(
         ...,
         description="ID del cliente tal como está en la tabla sales (CustomerID)",
     ),
-    k: int = Query(5, ge=1, le=50, description="Cantidad de productos recomendados"),
+    k: int = Query(10, ge=1, le=50, description="Cantidad de productos recomendados"),
     db: Session = Depends(get_db),
 ):
     """

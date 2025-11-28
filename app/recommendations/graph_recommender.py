@@ -105,7 +105,7 @@ def reconstruir_camino(path, destino_idx):
 
 
 
-def recomendar_productos_para_cliente(df: pd.DataFrame, customer_id: str, k: int = 5):
+def recomendar_productos_para_cliente(df: pd.DataFrame, customer_id: str, k: int ):
     """
     Construye el grafo a partir del df y devuelve hasta k productos recomendados
     para el cliente dado, usando el Dijkstra implementado a mano.
