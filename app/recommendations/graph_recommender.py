@@ -105,13 +105,13 @@ def reconstruir_camino(path, destino_idx):
 
 
 
-def recomendar_productos_para_cliente(df: pd.DataFrame, customer_id: str, k: int ):
-    """
-    Construye el grafo a partir del df y devuelve hasta k productos recomendados
-    para el cliente dado, usando el Dijkstra implementado a mano.
-    """
-
-    # Construimos grafo y estructuras
+def recomendar_productos_para_cliente(
+    df: pd.DataFrame,
+    customer_id: str,
+    k: int,
+    max_path_len: int = 4,   
+    min_path_len: int = 4
+):
     G, nodes_list, node_to_idx, adj = construir_grafo_desde_df(df)
 
     if customer_id not in node_to_idx:
@@ -119,10 +119,8 @@ def recomendar_productos_para_cliente(df: pd.DataFrame, customer_id: str, k: int
 
     origen_idx = node_to_idx[customer_id]
 
-    # Ejecutar Dijkstra
     path, cost = dijkstra(adj, origen_idx)
 
-    # Productos que YA compró
     productos_comprados = set(df[df["CustomerID"] == customer_id]["StockCode"])
 
     recomendaciones = []
@@ -131,6 +129,7 @@ def recomendar_productos_para_cliente(df: pd.DataFrame, customer_id: str, k: int
         nodo = nodes_list[idx]
         datos_nodo = G.nodes[nodo]
 
+        # solo productos, no comprados y alcanzables
         if (
             datos_nodo.get("tipo") == "stock"
             and nodo not in productos_comprados
@@ -138,6 +137,10 @@ def recomendar_productos_para_cliente(df: pd.DataFrame, customer_id: str, k: int
         ):
             camino_idx = reconstruir_camino(path, idx)
             camino_nodos = [nodes_list[i] for i in camino_idx]
+
+            # Filtramos por longitud de camino (entre 4 nodos exactos)
+            if not (min_path_len <= len(camino_nodos) <= max_path_len):
+                continue
 
             recomendaciones.append(
                 {
